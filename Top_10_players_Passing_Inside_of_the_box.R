@@ -154,11 +154,14 @@ df %>%
 # Goals by type
 ############################
 
+# Y axis inverted   y = 80-y
+
+
 df %>%
   filter(shot.outcome.name %in% c("Goal"))%>%
   ggplot()+
   annotate_pitch(x_scale = 1.2,  y_scale = 0.8, colour = "white",  fill = "green4")+
-  geom_segment(aes(x = x, y = y, xend = x_end, yend = y_end, colour = shot.type.name),size=1,
+  geom_segment(aes(x = x, y = 80-y, xend = x_end, yend =80- y_end, colour = shot.type.name),size=1,
                arrow = arrow(length = unit(0.02, "npc")))+
    xlim(0, 120)+ ylim(0, 80)+
   theme(axis.title.x=element_blank(),
