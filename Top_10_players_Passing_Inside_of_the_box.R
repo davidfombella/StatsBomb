@@ -61,16 +61,24 @@ ggplot(top10.passes.players.inside.box,aes(x=fct_reorder(player.name, passes.fro
                                            y=passes.from.inside.box.90))+
   geom_bar(stat="identity")+
   coord_flip()+
-  geom_text(aes(label=round(passes.from.inside.box.90,2)), vjust=1,hjust=2, color="white", size=4)
+  geom_text(aes(label=round(passes.from.inside.box.90,2)), vjust=1,hjust=2, color="white", size=4)+
+  labs(title="Top 10 Players by Passes Inside Box (StatsBomb)",
+       x ="Player", y = "Passes Inside Box per 90")+
+   theme(
+    plot.title = element_text(color="red", size=14, face="bold.italic"),
+    axis.title.x = element_text(color="blue", size=12, face="bold"),
+    axis.text.x = element_text(color="black", size=10, face="bold"),
+    axis.title.y = element_text(color="#993333", size=12, face="bold"),
+    axis.text.y = element_text(color="black", size=10, face="bold")
+  )
 
 
 #############################################
-## WC EVENTS ##
+## WC EVENTS  SPAIN  43 is World cup##
 #############################################
+library(ggsoccer)
 
 
-wc_events <- events %>%
-  filter(competition_id==43)
 
 wc_events_spain <- events %>%
   filter(team.name=="Spain",competition_id==43)
@@ -92,13 +100,74 @@ df<-wc_events_spain_shots %>%
 # All shots
 ggplot()+
   geom_segment(aes(x = x, y = y, xend = x_end, yend = y_end, colour = shot.outcome.name),
-               arrow = arrow(length = unit(0.02, "npc")),data = df)
+               arrow = arrow(length = unit(0.02, "npc")),data = df)+
+  xlim(0, 120)+ ylim(0, 80)
 
-
-# Goals
+############################
+# Goals and Saved
+############################
 
 df %>%
-  filter(shot.outcome.name=="Goal")%>%
+  filter(shot.outcome.name %in% c("Goal","Saved"))%>%
 ggplot()+
+  annotate_pitch(x_scale = 1.2,  y_scale = 0.8, colour = "white",  fill = "green4")+
   geom_segment(aes(x = x, y = y, xend = x_end, yend = y_end, colour = shot.outcome.name),
-               arrow = arrow(length = unit(0.02, "npc")))
+               arrow = arrow(length = unit(0.02, "npc")))+
+ xlim(80, 120)+ ylim(0, 80)+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()
+        )
+
+############################
+# Goals all with  right foot
+############################
+
+df %>%
+  filter(shot.outcome.name %in% c("Goal"))%>%
+  ggplot()+
+  annotate_pitch(x_scale = 1.2,  y_scale = 0.8, colour = "white",  fill = "green4")+
+  geom_segment(aes(x = x, y = y, xend = x_end, yend = y_end, colour = shot.body_part.name),
+               arrow = arrow(length = unit(0.02, "npc")))+
+  xlim(90, 120)+ ylim(0, 80)+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()
+  )
+
+
+
+
+############################
+# Goals by type
+############################
+
+df %>%
+  filter(shot.outcome.name %in% c("Goal"))%>%
+  ggplot()+
+  annotate_pitch(x_scale = 1.2,  y_scale = 0.8, colour = "white",  fill = "green4")+
+  geom_segment(aes(x = x, y = y, xend = x_end, yend = y_end, colour = shot.type.name),size=1,
+               arrow = arrow(length = unit(0.02, "npc")))+
+   xlim(0, 120)+ ylim(0, 80)+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()
+  )
