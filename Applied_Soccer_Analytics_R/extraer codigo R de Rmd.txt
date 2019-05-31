@@ -1,0 +1,4 @@
+
+library(knitr)
+
+purl("Applied Soccer Analytics with R.Rmd", output = "Applied Soccer Analytics with R.r", documentation = 2)
